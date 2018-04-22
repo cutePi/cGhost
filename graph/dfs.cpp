@@ -1,33 +1,50 @@
-#include<vector>
 #include <iostream>
+#include <list>
+
+#define V 4
 
 using namespace std;
 
-void addEdge(vector<int> adj[], int u, int v) {
-	adj[u].push_back(v);
-	adj[v].push_back(u);
+list<int> L[V];
+
+void addEdge(int u, int v) {
+	L[u].push_back(v);
 }
 
-void printGraph(vector<int> adj[], int V) {
+void print() {
 	for (int i = 0; i < V; i++) {
-		cout << "adjvency list of vertex" << i << endl;
-		for (auto x : adj[i]) {
-			cout << "-> " << x ;
+		cout << "[" << i << "] ";
+		for (auto m : L[i]) {
+			cout << "->" << m;
 		}
 		cout << "\n";
 	}
 }
 
+void dfsUtil(int s, bool visited[]) {
+	visited[s] = true;
+	cout << s << " ";
+	for (auto m : L[s]) {
+		if (!visited[m]) dfsUtil(m, visited);
+	}
+}
+// this dfs function handles for disconnected graph also
+// it iterates all nodes as start node
+void dfs() {
+	cout << "dfs result" << endl;
+	bool visited[V] = {false};
+	// bool *visited = new bool[V]{false};
+	for (int i = 0; i < V; i++) {
+		if (!visited[i]) dfsUtil(i, visited);
+	}
+}
 int main() {
-	int V = 5;
-	vector<int> adj[V];
-	addEdge(adj, 0, 1);
-	addEdge(adj, 0, 4);
-	addEdge(adj, 1, 2);
-	addEdge(adj, 1, 3);
-	addEdge(adj, 1, 4);
-	addEdge(adj, 2, 3);
-	addEdge(adj, 3, 4);
-	printGraph(adj, V);
-	return 0;
+	addEdge(0, 1);
+	addEdge(0, 2);
+	addEdge(1, 2);
+	addEdge(2, 0);
+	addEdge(2, 3);
+	addEdge(3, 3);
+	print();
+	dfs();
 }
