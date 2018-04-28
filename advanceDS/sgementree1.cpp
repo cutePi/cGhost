@@ -16,6 +16,17 @@ void fillST(int arr[], int s, int e, int *st, int index) {
 	cout << st<<"[" << index << "] = " << st[index] << endl;
 }
 
+void update(int arr[], int node, int l, int r, int idx, int val) {
+	if (l == r)  {
+		arr[node] += val;
+	}else {
+		int mid = (l + r)/ 2;
+		if (l <= idx && mid >= idx) update(arr, node * 2 +1 , l,  mid, idx, val);
+		else update(arr, node * 2+ 2, mid + 1, r, idx, val);
+		arr[node] = arr[node *2 +1 ] + arr[node *2 + 2];
+	}
+}
+
 int query(int arr[], int node, int l, int r, int sts, int ste) {
 	//cout << node << " " << l << " " << r << " " << sts << " " << ste << endl;
 	if (l <= sts && r >= ste) {
@@ -38,17 +49,17 @@ int *constructST(int arr[], int len) {
 	int seglenght  = 2 * (int)pow(2, x) - 1;
 	int *stptr =  new int[seglenght];
 	fillST(arr, 0, len-1,stptr, 0);
-	for (int i = 0; i <= seglenght; i++) {
-		cout << stptr[i] << " ";
-	}
+	//PrintST(arr);
 	cout << "\n";
 	return stptr;
 }
 
 int main() {
 	int arr[] = {1, 3, 5, 7, 9, 11};
+	//cout << PrintST(arr) << endl;
 	int len = sizeof(arr)/ sizeof(arr[0]);
 	int *st = constructST(arr, len);
 	cout << query(st, 0, 1, 2, 0, len-1) << endl;
+	//update()
 	return 0;
 }
